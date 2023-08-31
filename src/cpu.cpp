@@ -4,6 +4,7 @@
  */
 
 #include "cpu.h"
+#include "font.h"
 
 namespace cpu {
 
@@ -92,5 +93,11 @@ namespace cpu {
         I = 0;
         SP = 0;
         //stack;
+
+        // Initialising the font at its conventional space
+        RAM.fill(0);
+        for (int i = 0; i < FONT.size(); i++) {
+            RAM[FONT_START_ADDR + i] = FONT[i];
+        }
     }
 }

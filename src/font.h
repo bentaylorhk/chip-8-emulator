@@ -9,6 +9,8 @@
 
 // TODO: Could declate sprite constants like SPRITE HEIGHT?
 
+const uint16_t FONT_START_ADDR = 0x50;
+
 std::array<uint8_t, 5 * 0xF> FONT = {
         0xF0, 0x90, 0x90, 0x90, 0xF0, // 0
         0x20, 0x60, 0x20, 0x20, 0x70, // 1
