@@ -17,7 +17,7 @@ union {
     // The 4 nibbles.
     struct {
         unsigned int N : 4;
-        unsigned int Y : 4;
+        unsigned int Y : 4; // TODO: Should these be their own register?
         unsigned int X : 4;
         unsigned int OP : 4;
     };
@@ -77,8 +77,8 @@ void op2();
 
 // 3xkk - SE Vx, byte
 // Skip next instruction if Vx = kk.
-//         The interpreter compares register Vx to kk, and if they are
-//         equal, increments the program counter by 2.
+// The interpreter compares register Vx to kk, and if they are
+// equal, increments the program counter by 2.
 void op3();
 
 // 4xkk - SNE Vx, byte
@@ -104,13 +104,9 @@ void op7();
 
 // 8xy0 - LD Vx, Vy
 // Set Vx = Vy.
-//         Stores the value of register Vy in register Vx.
+// Stores the value of register Vy in register Vx.
 // 8xy1 - OR Vx, Vy
 // Set Vx = Vx OR Vy.
-// Performs a bitwise OR on the values of Vx and Vy, then stores the result
-// in Vx. A bitwise OR compares the corrseponding bits from two values, and
-// if either bit is 1, then the same bit in the result is also 1. Otherwise,
-// it is 0.
 // 8xy2 - AND Vx, Vy
 // Set Vx = Vx AND Vy.
 // Performs a bitwise AND on the values of Vx and Vy, then stores the result
@@ -125,9 +121,9 @@ void op7();
 // bit in the result is set to 1. Otherwise, it is 0.
 // 8xy4 - ADD Vx, Vy
 // Set Vx = Vx + Vy, set VF = carry.
-//         The values of Vx and Vy are added together. If the result is
-//         greater than 8 bits (i.e., > 255,) VF is set to 1, otherwise 0.
-//         Only the lowest 8 bits of the result are kept, and stored in Vx.
+// The values of Vx and Vy are added together. If the result is
+// greater than 8 bits (i.e., > 255,) VF is set to 1, otherwise 0.
+// Only the lowest 8 bits of the result are kept, and stored in Vx.
 // 8xy5 - SUB Vx, Vy
 // Set Vx = Vx - Vy, set VF = NOT borrow.
 // If Vx > Vy, then VF is set to 1, otherwise 0. Then Vy is subtracted from

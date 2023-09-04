@@ -5,6 +5,9 @@
 
 #include "cpu.h"
 
+#include <cstdlib>
+#include <ctime>
+
 #include "display.h"
 #include "font.h"
 
@@ -37,19 +40,27 @@ void op1() {
 }
 
 void op2() {
-    // TODO
+    // TODO Could the PC being incremented previous affect this?.
+    stack[++SP] = PC;
+    PC = opcode.NNN;
 }
 
 void op3() {
-    // TODO
+    if (V[opcode.X] == opcode.LSB) {
+        PC += 2;
+    }
 }
 
 void op4() {
-    // TODO
+    if (V[opcode.X] != opcode.LSB) {
+        PC += 2;
+    }
 }
 
 void op5() {
-    // TODO
+    if (V[opcode.X] == V[opcode.Y]) {
+        PC += 2;
+    }
 }
 
 void op6() {
@@ -62,10 +73,30 @@ void op7() {
 
 void op8() {
     // TODO
+    switch (opcode.N) {
+        case 0:
+            V[opcode.X] = V[opcode.Y];
+            break;
+        case 1:
+            V[opcode.X] |= V[opcode.Y];
+            break;
+        case 2:
+            V[opcode.X] &= V[opcode.Y];
+            break;
+        case 3:
+            V[opcode.X] ^= V[opcode.Y];
+            break;
+        case 4:
+            // (result & 0xFF00) != 0
+        default:
+            // TODO: Assert invalid op?
+    }
 }
 
 void op9() {
-    // TODO
+    if (V[opcode.X] != V[opcode.Y]) {
+        PC += 2;
+    }
 }
 
 void opA() {
@@ -73,11 +104,11 @@ void opA() {
 }
 
 void opB() {
-    // TODO
+    PC = opcode.NNN + V[0];
 }
 
 void opC() {
-    // TODO
+    V[opcode.X] = ((uint8_t) std::rand()) & opcode.LSB;
 }
 
 void opD() {
@@ -106,12 +137,16 @@ void reset() {
     PC = 0;
     I = 0;
     SP = 0;
-    // stack;
+    // stack; TODO
 
     // Initialising the font at its conventional space
     RAM.fill(0);
     for (int i = 0; i < FONT.size(); i++) {
         RAM[FONT_START_ADDR + i] = FONT[i];
     }
+
+    // Resetting the random seed.
+    // TODO: Better random?
+    std::srand(std::time(nullptr));
 }
 }  // namespace cpu
